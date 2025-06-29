@@ -7,12 +7,6 @@ services:
       - "8000:80"            # mesmo número dentro e fora
     expose:
       - "80"               # expõe a porta para outros containers
-    healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:80/health || exit 1"]
-      interval: 10s
-      timeout: 3s
-      retries: 5
-      disable: true
     environment:
       # OpenAI (embeddings)
       - OPENAI_API_KEY=${RAG_OPENAI_API_KEY}
@@ -34,8 +28,7 @@ services:
       # container escuta em 3080; exponha mesma porta
       - "3080:80"
     depends_on:
-       rag_api:
-          condition: service_healthy     # espera o health-check
+      - rag_api
     restart: always
     volumes:
       - ./librechat.yaml:/app/librechat.yaml
