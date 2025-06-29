@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  api:
+    image: ghcr.io/danny-avila/librechat:latest
+    container_name: LibreChat
+    ports:
+      - 3080:3080
+    depends_on:
+      - rag_api
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    env_file:
+      - .env
+    volumes:
+      - ./librechat.yaml:/app/librechat.yaml
+  
+  rag_api:
+    image: ghcr.io/danny-avila/librechat-rag-api-python-ollama:latest
+    container_name: RAG_API
+    ports:
+      - 8000:8000
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+
+volumes:
+  data:

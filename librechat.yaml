@@ -1,0 +1,37 @@
+version: 1.2.8
+
+# Seção de customização da interface do usuário
+interface:
+  # Muda o título que aparece na aba do navegador e na tela de login
+  appTitle: "GPtrigo"
+  # URL pública para a sua logo. A logo padrão será usada até você substituir.
+  logoUrl: "https://grupotrigo.com.br/wp-content/uploads/2023/11/Trigo-975x1024.png"
+  # Desativa o menu de seleção de modelos
+  modelSelect: false
+
+# Seção de configuração dos endpoints de IA
+endpoints:
+  openAI:
+    # Impede que a aplicação busque outros modelos disponíveis na sua chave
+    fetch: false
+    # Define a lista de modelos permitidos. Somente o gpt-4o-mini será usado.
+    models:
+      default: ["gpt-4o-mini"]
+
+# Seção de controle de registro de novos usuários
+registration:
+  # Apenas e-mails do domínio @grupotrigo.com.br poderão se registrar
+  allowed_domains:
+    - grupotrigo.com.br
+  # Na tela de login, irá mostrar APENAS o botão da Microsoft
+  social_logins_to_display:
+    - microsoft
+
+# Seção de limites de uso para controle de custos
+rate_limits:
+  # Aplica o limite por usuário logado
+  user:
+    # A janela de tempo é de 1 minuto
+    windowInMinutes: 1
+    # O usuário pode fazer no máximo 1 requisição por minuto
+    max: 1
