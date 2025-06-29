@@ -24,6 +24,6 @@ services:
 
   # O serviço da API de RAG para processamento de arquivos
   rag_api:
-    image: ghcr.io/danny-avila/librechat-rag-api-python-ollama:latest
+    image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     ports:
       - "8000:80"
