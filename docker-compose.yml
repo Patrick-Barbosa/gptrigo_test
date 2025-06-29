@@ -37,7 +37,7 @@ services:
       - S3_REGION=${S3_REGION}
       - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
       # Comunicação com a RAG API
-      - RAG_API_URL=${RAG_API_URL}
+      - RAG_API_URL="http://rag-api:8000"
 
   # O serviço da API de RAG para processamento de arquivos
   rag_api:
@@ -55,3 +55,5 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    expose:
+      - "8000"
