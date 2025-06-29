@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  rag_api:
+  rag:
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     ports:
       - "8000:80"            # mesmo número dentro e fora
@@ -26,9 +26,11 @@ services:
     image: ghcr.io/danny-avila/librechat:latest
     ports:
       # container escuta em 3080; exponha mesma porta
-      - "3080:80"
+      - "3080:3080"
+    expose:
+      - "3080"
     depends_on:
-      - rag_api
+      - rag
     restart: always
     volumes:
       - ./librechat.yaml:/app/librechat.yaml
@@ -65,4 +67,4 @@ services:
       - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
 
       # Comunicação interna com a RAG API
-      - RAG_API_URL=http://rag_api:80
+      - RAG_API_URL=http://rag:80
