@@ -10,8 +10,8 @@ services:
       # container escuta em 3080; exponha mesma porta
       - "3080:3080"
     depends_on:
-      rag_api:
-        condition: service_healthy     # espera o health-check
+       - rag_api
+     #   condition: service_healthy     # espera o health-check
     restart: always
     volumes:
       - ./librechat.yaml:/app/librechat.yaml
@@ -72,9 +72,9 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
     # Health-check: levanta “healthy” quando porta 8000 responde 200
-    healthcheck:
-      test: ["CMD-SHELL", "curl -sf http://localhost:8000/docs > /dev/null || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 6
-      start_period: 30s
+    #healthcheck:
+    #  test: ["CMD-SHELL", "curl -sf http://localhost:8000/docs > /dev/null || exit 1"]
+    #  interval: 10s
+    #  timeout: 5s
+    #  retries: 6
+    #  start_period: 30s
