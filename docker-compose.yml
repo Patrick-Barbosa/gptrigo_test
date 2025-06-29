@@ -10,7 +10,8 @@ services:
       # container escuta em 3080; exponha mesma porta
       - "3080:3080"
     depends_on:
-      - rag_api                # (health-check cobre readiness)
+      rag_api:
+        condition: service_healthy     # espera o health-check
     restart: always
     volumes:
       - ./librechat.yaml:/app/librechat.yaml
@@ -47,7 +48,7 @@ services:
       - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
 
       # Comunicação interna com a RAG API
-      - RAG_API_URL=http://rag-api:8000
+      - RAG_API_URL=http://rag_api:8000
 
   # ──────────────────────────────────────────────────────
   #  RAG API – ingestão e embeddings de documentos
