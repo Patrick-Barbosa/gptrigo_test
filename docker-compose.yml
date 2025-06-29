@@ -1,13 +1,17 @@
 version: '3.8'
 
 services:
-  # O serviço da aplicação principal
+  # ──────────────────────────────────────────────────────
+  #  UI / LibreChat Backend
+  # ──────────────────────────────────────────────────────
   api:
     image: ghcr.io/danny-avila/librechat:latest
     ports:
-      - "3080:80"
+      # container escuta em 3080; exponha mesma porta
+      - "3080:3080"
     depends_on:
-      - rag_api
+      - rag_api                # (health-check cobre readiness)
+    restart: always
     volumes:
       - ./librechat.yaml:/app/librechat.yaml
     environment:
@@ -15,45 +19,61 @@ services:
       - ALLOW_REGISTRATION=${ALLOW_REGISTRATION}
       - ALLOW_SOCIAL_LOGIN=${ALLOW_SOCIAL_LOGIN}
       - ALLOW_EMAIL_LOGIN=${ALLOW_EMAIL_LOGIN}
+
       # Banco de Dados Principal
       - MONGO_URI=${MONGO_URI}
+
       # Segurança e Tokens
       - JWT_SECRET=${JWT_SECRET}
       - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
       - CREDS_KEY=${CREDS_KEY}
       - CREDS_IV=${CREDS_IV}
-      # OpenAI (para o chat principal)
+
+      # OpenAI (chat principal)
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+
       # Auth0
       - AUTH0_DOMAIN=${AUTH0_DOMAIN}
       - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
       - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}
       - AUTH0_ISSUER_BASE_URL=${AUTH0_ISSUER_BASE_URL}
-      # Armazenamento de Arquivos (R2)
+
+      # Armazenamento de Arquivos (R2 / S3)
       - S3_BUCKET=${S3_BUCKET}
       - S3_ENDPOINT=${S3_ENDPOINT}
       - R2_ACCESS_KEY=${R2_ACCESS_KEY}
       - R2_SECRET_KEY=${R2_SECRET_KEY}
       - S3_REGION=${S3_REGION}
       - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
-      # Comunicação com a RAG API
-      - RAG_API_URL="http://rag-api:8000"
 
-  # O serviço da API de RAG para processamento de arquivos
+      # Comunicação interna com a RAG API
+      - RAG_API_URL=http://rag-api:8000
+
+  # ──────────────────────────────────────────────────────
+  #  RAG API – ingestão e embeddings de documentos
+  # ──────────────────────────────────────────────────────
   rag_api:
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
-    ports:
-      - "8000:80"
+    restart: always
+    expose:
+      - "8000"                 # só rede interna; não publicar externamente
     environment:
-      # OpenAI (para os embeddings dos documentos)
+      # OpenAI (embeddings)
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - RAG_OPENAI_API_KEY=${RAG_OPENAI_API_KEY}
-      # Banco Vetorial (Supabase/PostgreSQL)
+
+      # Banco Vetorial (Supabase/PostgreSQL + pgvector)
       - VECTOR_DB_TYPE=${VECTOR_DB_TYPE}
       - DB_HOST=${DB_HOST}
       - DB_PORT=${DB_PORT}
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    expose:
-      - "8000"
+
+    # Health-check: levanta “healthy” quando porta 8000 responde 200
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8000/docs > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
