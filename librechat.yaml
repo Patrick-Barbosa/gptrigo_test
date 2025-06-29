@@ -26,12 +26,3 @@ registration:
   # Na tela de login, irá mostrar APENAS o botão da Microsoft
   social_logins_to_display:
     - microsoft
-
-# Seção de limites de uso para controle de custos
-rate_limits:
-  # Aplica o limite por usuário logado
-  user:
-    # A janela de tempo é de 1 minuto
-    windowInMinutes: 1
-    # O usuário pode fazer no máximo 1 requisição por minuto
-    max: 1
