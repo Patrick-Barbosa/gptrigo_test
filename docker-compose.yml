@@ -1,31 +1,29 @@
 version: '3.8'
 
 services:
+  # O serviço da aplicação principal
   api:
     image: ghcr.io/danny-avila/librechat:latest
-    container_name: LibreChat
     ports:
-      - 3080:3080
+      - "3080:80"
     depends_on:
       - rag_api
-    restart: unless-stopped
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    env_file:
-      - .env
+    # Monta o arquivo de configuração customizado que está no seu repositório
     volumes:
       - ./librechat.yaml:/app/librechat.yaml
-  
+    # Define as variáveis de ambiente diretamente. Koyeb irá preenchê-las.
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - RAG_API_URL=http://rag_api:8000
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - CREDS_KEY=${CREDS_KEY}
+      - CREDS_IV=${CREDS_IV}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      # E todas as outras variáveis que configuramos...
+
+  # O serviço da API de RAG para processamento de arquivos
   rag_api:
     image: ghcr.io/danny-avila/librechat-rag-api-python-ollama:latest
-    container_name: RAG_API
     ports:
-      - 8000:8000
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - ./data:/app/data
-
-volumes:
-  data:
+      - "8000:80"
