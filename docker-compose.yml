@@ -19,6 +19,17 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
+      # Armazenamento de Arquivos (R2 / S3)
+      - S3_BUCKET=${S3_BUCKET}
+      - S3_ENDPOINT=${S3_ENDPOINT}
+      - R2_ACCESS_KEY=${R2_ACCESS_KEY}
+      - R2_SECRET_KEY=${R2_SECRET_KEY}
+      - S3_REGION=${S3_REGION}
+      - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
+
+      # Volume persistente
+      - FILE_STORAGE_DIR=${FILE_STORAGE_DIR}
+
   # ──────────────────────────────────────────────────────
   #  UI / LibreChat Backend
   # ──────────────────────────────────────────────────────
@@ -68,3 +79,6 @@ services:
 
       # Comunicação interna com a RAG API
       - RAG_API_URL=http://rag:8000
+
+      # Volume persistente
+      - FILE_STORAGE_DIR=${FILE_STORAGE_DIR}
