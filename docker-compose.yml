@@ -37,7 +37,7 @@ services:
       - S3_REGION=${S3_REGION}
       - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
       # Comunicação Interna
-      - RAG_API_URL=http://rag_api:8000
+      - RAG_API_URL=${RAG_API_URL}
 
   # O serviço da API de RAG para processamento de arquivos
   rag_api:
