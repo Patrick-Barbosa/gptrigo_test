@@ -4,9 +4,9 @@ services:
   rag:
     image: ghcr.io/danny-avila/librechat-rag-api-dev-lite:latest
     ports:
-      - "8000:80"            # mesmo número dentro e fora
+      - "8000:8000"            # mesmo número dentro e fora
     expose:
-      - "80"               # expõe a porta para outros containers
+      - "8000"               # expõe a porta para outros containers
     environment:
       # OpenAI (embeddings)
       - OPENAI_API_KEY=${RAG_OPENAI_API_KEY}
@@ -67,4 +67,4 @@ services:
       - S3_FORCE_PATH_STYLE=${S3_FORCE_PATH_STYLE}
 
       # Comunicação interna com a RAG API
-      - RAG_API_URL=http://rag:80
+      - RAG_API_URL=http://rag:8000
