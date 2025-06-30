@@ -12,12 +12,16 @@ interface:
 # Seção de configuração dos endpoints de IA
 endpoints:
   openAI:
-    # Impede que a aplicação busque outros modelos disponíveis na sua chave
+    baseURL: "https://api.openai.com/v1"   # mantém para texto
     fetch: false
-    # Define a lista de modelos permitidos. Somente o gpt-4o-mini será usado.
+
     models:
       default: ["gpt-3.5-turbo"]
-      vision: ["gpt-4o"]
+
+      vision:
+        - model: "gpt-4o"        # ou gpt-4o-mini, gpt-4-0613…
+          useResponsesAPI: true  # ← isso avisa o backend que deve usar /v1/responses
+
 
 # Seção de controle de registro de novos usuários
 registration:
