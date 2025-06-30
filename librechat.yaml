@@ -17,6 +17,7 @@ endpoints:
     # Define a lista de modelos permitidos. Somente o gpt-4o-mini será usado.
     models:
       default: ["gpt-3.5-turbo"]
+      vision: ["gpt-3.5-turbo"]
 
 # Seção de controle de registro de novos usuários
 registration:
