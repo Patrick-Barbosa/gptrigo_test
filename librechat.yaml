@@ -17,7 +17,7 @@ endpoints:
     # Define a lista de modelos permitidos. Somente o gpt-4o-mini será usado.
     models:
       default: ["gpt-3.5-turbo"]
-      vision: ["gpt-3.5-turbo"]
+      vision: ["gpt-4o"]
 
 # Seção de controle de registro de novos usuários
 registration:
@@ -26,4 +26,4 @@ registration:
     - grupotrigo.com.br
   # Na tela de login, irá mostrar APENAS o botão da Microsoft
   social_logins_to_display:
-    - microsoft
+    - openid
