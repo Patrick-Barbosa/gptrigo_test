@@ -85,3 +85,7 @@ services:
 
       # Volume persistente
       - FILE_STORAGE_DIR=${FILE_STORAGE_DIR}
+      
+      # Configurações de Debug
+      - DEBUG_RAG_REQUESTS=true
+      - DEBUG_CONSOLE=true
