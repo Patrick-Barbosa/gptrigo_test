@@ -27,3 +27,4 @@ registration:
   # Na tela de login, irá mostrar APENAS o botão da Microsoft
   social_logins_to_display:
     - openid
+    - microsoft
